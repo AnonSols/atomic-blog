@@ -18,7 +18,9 @@ type PostContextProp = {
   onAddPost: (post: Post) => void;
 };
 
-export const PostContext = createContext<PostContextProp>();
+export const PostContext = createContext<PostContextProp>(
+  {} as PostContextProp
+);
 
 function PostProvider({ children }: prop) {
   const [posts, setPosts] = useState(() =>
