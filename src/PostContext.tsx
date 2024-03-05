@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 type prop = {
   children: React.ReactNode;
@@ -18,9 +18,7 @@ type PostContextProp = {
   onAddPost: (post: Post) => void;
 };
 
-export const PostContext = createContext<PostContextProp>(
-  {} as PostContextProp
-);
+const PostContext = createContext<PostContextProp | undefined>(undefined);
 
 function PostProvider({ children }: prop) {
   const [posts, setPosts] = useState(() =>
@@ -68,4 +66,15 @@ function PostProvider({ children }: prop) {
   );
 }
 
-export default PostProvider;
+function usePost() {
+  const context = useContext(PostContext);
+
+  if (context === undefined)
+    throw new Error(
+      "contex is undefined, post context was used outside of the post provider"
+    );
+
+  return context;
+}
+export { PostProvider, usePost };
+// solution to not getting error on line 76 is creating a hook file for this usePost for fast refresh to work properly the error is happening because we are export two component at the same time.
