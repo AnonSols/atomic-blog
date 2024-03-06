@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { faker } from "@faker-js/faker";
 
 type SearchPost = {
@@ -120,7 +120,7 @@ function Main({
   posts,
   onAddPost,
 }: {
-  posts: SearchPost;
+  posts: SearchPost[];
   onAddPost: (post: SearchPost) => void;
 }) {
   return (
@@ -131,7 +131,7 @@ function Main({
   );
 }
 
-function Posts({ posts }: { posts: SearchPost }) {
+function Posts({ posts }: { posts: SearchPost[] }) {
   return (
     <section>
       <List posts={posts} />
@@ -143,7 +143,7 @@ function FormAddPost({ onAddPost }: { onAddPost: (post: SearchPost) => void }) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
-  const handleSubmit = function (e) {
+  const handleSubmit = function (e: FormEvent) {
     e.preventDefault();
     if (!body || !title) return;
     onAddPost({ title, body });
@@ -168,7 +168,7 @@ function FormAddPost({ onAddPost }: { onAddPost: (post: SearchPost) => void }) {
   );
 }
 
-function List({ posts }: { posts: SearchPost }) {
+function List({ posts }: { posts: SearchPost[] }) {
   return (
     <ul>
       {posts.map((post, i) => (
