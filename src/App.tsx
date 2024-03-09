@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { faker } from "@faker-js/faker";
 import { PostProvider, usePost } from "./PostContext";
 
@@ -41,12 +41,7 @@ function App() {
   );
 }
 
-// type postsProp = {
-//   title: string;
-//   body: string;
-// };
-
-function Header() {
+const Header = memo(function Header() {
   const { onClearPosts } = usePost();
 
   return (
@@ -61,7 +56,7 @@ function Header() {
       </div>
     </header>
   );
-}
+});
 
 function SearchPosts() {
   const { searchQuery, setSearchQuery } = usePost();
@@ -85,16 +80,16 @@ function Results() {
   return <p>🚀 {posts.length} atomic posts found</p>;
 }
 
-function Main() {
+const Main = memo(() => {
   return (
     <main>
       <FormAddPost />
       <Posts />
     </main>
   );
-}
+});
 
-function Posts() {
+const Posts = memo(function Posts() {
   const { posts } = usePost();
 
   return (
@@ -102,7 +97,7 @@ function Posts() {
       <List posts={posts} />
     </section>
   );
-}
+});
 
 function FormAddPost() {
   const [title, setTitle] = useState("");
@@ -149,7 +144,7 @@ function List({ posts }: { posts: Post[] }) {
   );
 }
 
-function Archive() {
+const Archive = memo(function Archive() {
   const { onAddPost } = usePost();
   // Here we don't need the setter function. We're only using state to store these posts because the callback function passed into useState (which generates the posts) is only called once, on the initial render. So we use this trick as an optimization technique, because if we just used a regular variable, these posts would be re-created on every render. We could also move the posts outside the components, but I wanted to show you this trick 😉
   const [posts] = useState(() =>
@@ -180,7 +175,7 @@ function Archive() {
       )}
     </aside>
   );
-}
+});
 
 function Footer() {
   return <footer>&copy; by The Atomic Blog ✌️ by Anon sols</footer>;
